@@ -296,6 +296,9 @@ AS_CASE(["${host_cpu}"],
     AC_ARG_ENABLE([bcm2835gpio],
       AS_HELP_STRING([--enable-bcm2835gpio], [Enable building support for bitbanging on BCM2835 (as found in Raspberry Pi)]),
       [build_bcm2835gpio=$enableval], [build_bcm2835gpio=no])
+    AC_ARG_ENABLE([bcm2835gpio_all_gpio],
+      AS_HELP_STRING([--enable-bcm2835gpio_all_gpio], [Enable building support pins > 32 on BCM2835]),
+      [bcm2835gpio_all_gpio=$enableval], [bcm2835gpio_all_gpio=no])
     AC_ARG_ENABLE([imx_gpio],
       AS_HELP_STRING([--enable-imx_gpio], [Enable building support for bitbanging on NXP IMX processors]),
       [build_imx_gpio=$enableval], [build_imx_gpio=no])
@@ -305,6 +308,7 @@ AS_CASE(["${host_cpu}"],
   ],
   [
     build_bcm2835gpio=no
+    bcm2835gpio_all_gpio=no
     build_imx_gpio=no
     build_am335xgpio=no
 ])
@@ -501,6 +505,9 @@ AS_IF([test "x$build_at91rm9200" = "xyes"], [
 AS_IF([test "x$build_bcm2835gpio" = "xyes"], [
   build_bitbang=yes
   AC_DEFINE([BUILD_BCM2835GPIO], [1], [1 if you want bcm2835gpio.])
+  AS_IF([test "x$bcm2835gpio_all_gpio" = "xyes"], [
+    AC_DEFINE([BCM2835GPIO_ALL_GPIO], [1], [1 if you want support for all BCM2835 GPIO pins.])
+  ], [])
 ], [
   AC_DEFINE([BUILD_BCM2835GPIO], [0], [0 if you don't want bcm2835gpio.])
 ])
